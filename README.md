@@ -1,9 +1,19 @@
 # Arma 3 market dashboard
  A simple market dashboard for the [ARMA 3](https://arma3.com) server [LIVEYOURLIFE](https://www.lyl.gg).
+ ![grafik](https://user-images.githubusercontent.com/43930246/215349585-e494a3a1-b9f5-4de8-a8e0-8ac9bc1e9fa5.png)
+
 ## Installation
 First you have to install the dependencys with the following command:
 ```console
-foo@bar:~$ pip -r requirements.txt
+foo@bar:~$ pip install -r requirements.txt
+```
+If you get this error: 
+```error
+ImportError: Unable to import required dependencies: numpy
+```
+Try this: 
+```console
+foo@bar:~$ sudo apt-get install libatlas-base-dev
 ```
 After that you are ready to execute with: 
 ```console
@@ -46,3 +56,6 @@ optional arguments:
 ```console
 foo@bar:~$ python3 app.py -i 10 f65d9a73f116a92a20afb641b599dc1dc6a39f63
 ```
+Congratulation you now can access the dashboard 🎉<br>
+Just go to http://0.0.0.0:8080/ if you run the app local. <br>
+Otherwise go to http://\<Ip of your server\>:8080/
