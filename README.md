@@ -1,5 +1,5 @@
-# Arma3 market dashboard
- An simple market dashboard for the [ARMA 3](https://arma3.com) server [LIVEYOURLIFE](https://www.lyl.gg).
+# Arma 3 market dashboard
+ A simple market dashboard for the [ARMA 3](https://arma3.com) server [LIVEYOURLIFE](https://www.lyl.gg).
 ## Installation
 First you have to install the dependencys with the following command:
 ```console
