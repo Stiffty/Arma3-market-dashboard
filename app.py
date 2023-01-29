@@ -153,13 +153,14 @@ app.layout = html.Div(children=[
         figure=overview_graph
     ),
     dcc.Graph(
-        id='pie-chart',
-        figure=pie_chart
-    ),
-    dcc.Graph(
         id='history-graph',
         figure=history_graph
     ),
+    dcc.Graph(
+        id='pie-chart',
+        figure=pie_chart
+    ),
+
 ])
 
 if __name__ == '__main__':
