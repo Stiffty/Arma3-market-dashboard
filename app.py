@@ -32,17 +32,21 @@ def make_request(cookie):
 
 
 def fetch_data_loop(cookie, interval):
-    while True:
-        json_new_request = make_request(cookie)
-        print('New data fetched')
-        global json_market_now
-        global json_market_history
+    try:
+        while True:
+            
+            json_new_request = make_request(cookie)
+            print('New data fetched', flush=True)
+            global json_market_now
+            global json_market_history
 
-        list_of_products = reformat_data([safe_data(json_new_request)])
-        json_market_now = {'market': list_of_products}
-        json_market_history['data'] = json_market_history['data'] + list_of_products
+            list_of_products = reformat_data([safe_data(json_new_request)])
+            json_market_now = {'market': list_of_products}
+            json_market_history['data'] = json_market_history['data'] + list_of_products
 
-        time.sleep(interval * 60)
+            time.sleep(interval * 60)
+    except Exception as e: 
+        print(e, flush=True)
 
 
 @app.callback(
