@@ -14,28 +14,45 @@ interval_in_minutes = 2
 
 app = Dash(__name__)
 
+cookie = '123'
 
-def make_request(cookie):
+
+def make_request():
+    global cookie
+    global args
+    cookies = dict(wsc_267ea4_cookieHash=cookie, wsc_267ea4_userID=args.wsc_267ea4_userID,
+                   wsc_267ea4_oabf=args.wsc_267ea4_oabf,
+                   wsc_267ea4_password=args.wsc_267ea4_password)
     try:
-        cookies = dict(wsc_267ea4_cookieHash=cookie)
-        x = requests.get('https://www.lyl.gg/lyl-api/arma-dashboard.php', cookies=cookies)
 
-        request_text = x.text
-        index_bracket = x.text.index('{')
+        req = requests.get('https://www.lyl.gg/lyl-api/arma-dashboard.php', cookies=cookies)
+
+
+        request_text = req.text
+        index_bracket = req.text.index('{')
         if index_bracket != 0:
             request_text = request_text[index_bracket:]
         return json.loads(request_text)
 
     except:
-        print('Error! : You probably have to update your cookie.')
-        exit(-1)
+        print('Updating cookie...', flush=True)
+        update_cookies(cookies)
+        return make_request()
 
 
-def fetch_data_loop(cookie, interval):
+def update_cookies(cookies_dic):
+    global cookie
+    req = requests.get('https://www.lyl.gg/', cookies=cookies_dic)
+
+    for c in req.cookies:
+        if c.name == 'wsc_267ea4_cookieHash':
+            cookie = c.value
+
+
+def fetch_data_loop(interval):
     try:
         while True:
-            
-            json_new_request = make_request(cookie)
+            json_new_request = make_request()
             print('New data fetched', flush=True)
             global json_market_now
             global json_market_history
@@ -45,7 +62,7 @@ def fetch_data_loop(cookie, interval):
             json_market_history['data'] = json_market_history['data'] + list_of_products
 
             time.sleep(interval * 60)
-    except Exception as e: 
+    except Exception as e:
         print(e, flush=True)
 
 
@@ -110,8 +127,12 @@ def safe_data(json_request):
 # Handle passed arguments
 parser = argparse.ArgumentParser(
     description='A visualisation of market data fetched from the website of the arma 3 server lyl. ')
-parser.add_argument('cookie', type=str,
-                    help='The value of the wsc_267ea4_cookieHash from the request to https://www.lyl.gg/lyl-api/arma-dashboard.php.')
+parser.add_argument('wsc_267ea4_userID', type=str,
+                    help='The value of the wsc_267ea4_userID cookie.')
+parser.add_argument('wsc_267ea4_oabf', type=str,
+                    help='The value of the wsc_267ea4_oabf cookie.')
+parser.add_argument('wsc_267ea4_password', type=str,
+                    help='The value of the wsc_267ea4_password cookie.')
 parser.add_argument('-i', '--interval', type=int,
                     help='Sets the interval in minutes in which new data is fetched from the website. (default is 5)',
                     default=5)
@@ -119,7 +140,7 @@ args = parser.parse_args()
 
 # Fetch first data
 print('Fetching first data')
-json_first_request = make_request(args.cookie)
+json_first_request = make_request()
 safe_data(json_first_request)
 
 json_market_now = json_first_request
@@ -129,7 +150,7 @@ json_market_history = load_data()
 
 # start update/fetch loop
 print('Start loop to fetch new data')
-Timer(5, fetch_data_loop, [args.cookie, args.interval]).start()
+Timer(5, fetch_data_loop, [args.interval]).start()
 
 # init dataframes for graphs
 df = pd.DataFrame(json_market_now['market'])
