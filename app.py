@@ -90,7 +90,7 @@ def overview_graph_callback(n):
 
 def reformat_time(time_as_int):
     return datetime.datetime.fromtimestamp(time_as_int).strftime(
-        "%H:%M:%S")
+        "%m/%d/%Y, %H:%M:%S")
 
 
 def reformat_data(data_as_list):
