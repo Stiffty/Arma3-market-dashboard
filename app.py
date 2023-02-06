@@ -162,6 +162,10 @@ overview_graph = px.line(df, x="diff", y="price", color="name", markers=True,
 
 history_graph = px.line(df2, x="updateTime", y="diff", color="name",
                         title='History of the difference in price')
+
+price_history_graph = px.line(df2, x="updateTime", y="price", color="name",
+                        title='History of the price')
+
 pie_chart = px.pie(df, values="price", names="name", title='Most profit')
 pie_chart.update_traces(textposition='inside', textinfo='value+label')
 
@@ -180,6 +184,10 @@ app.layout = html.Div(children=[
     dcc.Graph(
         id='history-graph',
         figure=history_graph
+    ),
+    dcc.Graph(
+        id='history-price-graph',
+        figure=price_history_graph
     ),
     dcc.Graph(
         id='pie-chart',
